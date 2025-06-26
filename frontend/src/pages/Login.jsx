@@ -1,15 +1,39 @@
 // src/pages/Login.jsx
-// src/pages/Login.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import {
+  alertaError,
+  alertaExito
+} from '../utils/alertas';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí haremos la conexión con el backend más adelante usando authService
-    console.log('Intentando iniciar sesión con:', { email, contraseña });
+    try {
+      const response = await axios.post('http://localhost:4000/api/login', {
+        email,
+        password: contraseña
+      });
+
+      if (response.data.success) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('rol', response.data.rol);
+        localStorage.setItem('usuario', response.data.usuario);
+
+        alertaExito('Bienvenido', `Hola ${response.data.usuario}`);
+        navigate('/menu');
+      } else {
+        alertaError('Error', 'Credenciales incorrectas');
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      alertaError('Error', 'No se pudo iniciar sesión. Verifica los datos.');
+    }
   };
 
   return (
@@ -53,4 +77,3 @@ const Login = () => {
 };
 
 export default Login;
-

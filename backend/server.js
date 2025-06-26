@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config(); // <--- esta línea es muy importante
+
 const db = require('./config/db');
 
 const app = express();
@@ -8,12 +10,12 @@ app.use(express.json());
 
 const errorHandler = require('./middlewares/errorHandler');
 const notFound = require('./middlewares/notFound');
-const logger = require('./middlewares/loggerMiddleware'); // opcional
+// const logger = require('./middlewares/loggerMiddleware'); // opcional
 
 // Middlewares globales
 app.use(cors());
 app.use(express.json());
-app.use(logger); // opcional
+// app.use(logger); // opcional
 
 // ✅ IMPORTANTE: Usa las rutas correctamente
 app.use('/api/categorias', require('./routes/categorias.routes'));
@@ -36,9 +38,12 @@ app.use('/api/usuarios', usuariosRoutes);
 const auditoriaRoutes = require('./routes/auditoriaRoutes');
 app.use('/api/auditoria', auditoriaRoutes);
 
-const authRoutes = require('./routes/authRoutes');
-app.use('/api', authRoutes);
+app.get('/', (req, res) => {
+  res.send('Bienvenido al backend del sistema de inventario');
+});
 
+const authRoutes = require('./routes/authRoutes');
+app.use('/api', authRoutes); // Esto activa /api/login
 
 app.use(notFound);
 app.use(errorHandler);
