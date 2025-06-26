@@ -25,7 +25,20 @@ const obtenerProductoPorId = (req, res) => {
 };
 
 const crearProducto = (req, res) => {
-  const producto = req.body;
+  const { nombre, descripcion, stock, precio, categoria_id, proveedor_id } = req.body;
+
+  if (
+    !nombre ||
+    stock === undefined || isNaN(stock) ||
+    precio === undefined || isNaN(precio) ||
+    !categoria_id ||
+    !proveedor_id
+  ) {
+    return res.status(400).json({ mensaje: 'Faltan datos requeridos o inválidos' });
+  }
+
+  const producto = { nombre, descripcion, stock, precio, categoria_id, proveedor_id };
+
   productosModel.crearProducto(producto, (err, results) => {
     if (err) {
       console.error(err);
@@ -37,7 +50,20 @@ const crearProducto = (req, res) => {
 
 const actualizarProducto = (req, res) => {
   const { id } = req.params;
-  const producto = req.body;
+  const { nombre, descripcion, stock, precio, categoria_id, proveedor_id } = req.body;
+
+  if (
+    !nombre ||
+    stock === undefined || isNaN(stock) ||
+    precio === undefined || isNaN(precio) ||
+    !categoria_id ||
+    !proveedor_id
+  ) {
+    return res.status(400).json({ mensaje: 'Faltan datos requeridos o inválidos' });
+  }
+
+  const producto = { nombre, descripcion, stock, precio, categoria_id, proveedor_id };
+
   productosModel.actualizarProducto(id, producto, (err) => {
     if (err) {
       console.error(err);

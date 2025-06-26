@@ -1,7 +1,16 @@
 const db = require('../config/db');
 
 const obtenerProductos = (callback) => {
-  db.query('SELECT * FROM productos', callback);
+  db.query(
+    `SELECT 
+      p.*, 
+      c.nombre AS categoria_nombre, 
+      pr.nombre AS proveedor_nombre
+    FROM productos p
+    LEFT JOIN categorias c ON p.categoria_id = c.id
+    LEFT JOIN proveedores pr ON p.proveedor_id = pr.id`,
+    callback
+  );
 };
 
 const obtenerProductoPorId = (id, callback) => {
@@ -9,19 +18,19 @@ const obtenerProductoPorId = (id, callback) => {
 };
 
 const crearProducto = (producto, callback) => {
-  const { codigo, nombre, descripcion, cantidad, precio, categoria_id } = producto;
+  const { nombre, descripcion, stock, precio, categoria_id, proveedor_id } = producto;
   db.query(
-    'INSERT INTO productos (codigo, nombre, descripcion, cantidad, precio, categoria_id) VALUES (?, ?, ?, ?, ?, ?)',
-    [codigo, nombre, descripcion, cantidad, precio, categoria_id],
+    'INSERT INTO productos (nombre, descripcion, stock, precio, categoria_id, proveedor_id) VALUES (?, ?, ?, ?, ?, ?)',
+    [nombre, descripcion, stock, precio, categoria_id, proveedor_id],
     callback
   );
 };
 
 const actualizarProducto = (id, producto, callback) => {
-  const { codigo, nombre, descripcion, cantidad, precio, categoria_id } = producto;
+  const { nombre, descripcion, stock, precio, categoria_id, proveedor_id } = producto;
   db.query(
-    'UPDATE productos SET codigo = ?, nombre = ?, descripcion = ?, cantidad = ?, precio = ?, categoria_id = ? WHERE id = ?',
-    [codigo, nombre, descripcion, cantidad, precio, categoria_id, id],
+    'UPDATE productos SET nombre = ?, descripcion = ?, stock = ?, precio = ?, categoria_id = ?, proveedor_id = ? WHERE id = ?',
+    [nombre, descripcion, stock, precio, categoria_id, proveedor_id, id],
     callback
   );
 };
