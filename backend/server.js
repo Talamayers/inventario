@@ -35,8 +35,8 @@ app.use('/api/salidas', salidasRoutes);
 const usuariosRoutes = require('./routes/usuariosRoutes');
 app.use('/api/usuarios', usuariosRoutes);
 
-const auditoriaRoutes = require('./routes/auditoriaRoutes');
-app.use('/api/auditoria', auditoriaRoutes);
+//const auditoriaRoutes = require('./routes/auditoriaRoutes');
+//app.use('/api/auditoria', auditoriaRoutes);
 
 app.get('/', (req, res) => {
   res.send('Bienvenido al backend del sistema de inventario');

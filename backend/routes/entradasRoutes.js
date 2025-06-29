@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const entradasController = require('../controllers/entradas.controller');
+const entradaController = require('../controllers/entradas.controller');
 
-router.get('/', entradasController.getAllEntradas);
-router.post('/', entradasController.createEntrada);
-router.put('/:id', entradasController.updateEntrada);
-router.delete('/:id', entradasController.deleteEntrada);
+// Obtener entradas
+router.get('/', entradaController.obtenerEntradas);
+
+// Registrar nueva entrada
+router.post('/', entradaController.registrarEntrada);
 
 module.exports = router;

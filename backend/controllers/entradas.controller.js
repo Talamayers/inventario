@@ -1,33 +1,56 @@
 const Entrada = require('../models/entrada.model');
+const Auditoria = require('../models/auditoria.model');
 
-exports.getAllEntradas = (req, res) => {
-  Entrada.getAll((err, results) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(results);
+// Registrar nueva entrada
+const registrarEntrada = (req, res) => {
+  const { producto_id, proveedor_id, cantidad, comentario, usuario_id } = req.body;
+
+  if (!producto_id || !proveedor_id || !cantidad || !usuario_id || isNaN(cantidad)) {
+    return res.status(400).json({ mensaje: 'Datos incompletos o inválidos' });
+  }
+
+  const entrada = {
+    producto_id,
+    proveedor_id,
+    cantidad: parseInt(cantidad),
+    comentario: comentario || '',
+    usuario_id,
+  };
+
+  Entrada.registrarEntrada(entrada, (err, resultado) => {
+    if (err) {
+      console.error('Error al registrar entrada:', err);
+      return res.status(500).json({ mensaje: 'Error al registrar entrada' });
+    }
+
+    // Registrar en auditoría
+    Auditoria.registrarAuditoria(
+      usuario_id,
+      'REGISTRAR_ENTRADA',
+      `Entrada de ${entrada.cantidad} unidades para el producto ID ${producto_id}`,
+      (errAud) => {
+        if (errAud) {
+          console.error('Error al registrar en auditoría:', errAud);
+        }
+      }
+    );
+
+    res.status(201).json({ mensaje: 'Entrada registrada', id: resultado.entradaId });
   });
 };
 
-exports.createEntrada = (req, res) => {
-  const nuevaEntrada = req.body;
-  Entrada.create(nuevaEntrada, (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: 'Entrada creada', id: result.insertId });
+// Obtener todas las entradas
+const obtenerEntradas = (req, res) => {
+  Entrada.obtenerEntradas((err, entradas) => {
+    if (err) {
+      console.error('Error al obtener entradas:', err);
+      return res.status(500).json({ mensaje: 'Error al obtener entradas' });
+    }
+    res.json(entradas);
   });
 };
 
-exports.updateEntrada = (req, res) => {
-  const id = req.params.id;
-  const datos = req.body;
-  Entrada.update(id, datos, (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: 'Entrada actualizada' });
-  });
-};
-
-exports.deleteEntrada = (req, res) => {
-  const id = req.params.id;
-  Entrada.delete(id, (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: 'Entrada eliminada' });
-  });
+module.exports = {
+  registrarEntrada,
+  obtenerEntradas
 };
