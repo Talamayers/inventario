@@ -45,16 +45,7 @@ const crearProducto = (req, res) => {
     if (err) return res.status(500).json({ mensaje: 'Error al crear producto' });
 
     // 🔥 AUDITORÍA CORREGIDA - Solo 3 parámetros según tu estructura DB
-    if (usuario_id) {
-      Auditoria.registrarAuditoria(
-        usuario_id,
-        `Crear Producto: ${nombre}`,  // Acción descriptiva
-        (errAud) => {
-          if (errAud) console.error('❌ Error en auditoría:', errAud);
-          else console.log('✅ Auditoría registrada: Crear producto');
-        }
-      );
-    }
+    
 
     res.status(201).json({ mensaje: 'Producto creado', id: results.insertId });
   });
@@ -74,16 +65,7 @@ const actualizarProducto = (req, res) => {
     if (err) return res.status(500).json({ mensaje: 'Error al actualizar producto' });
 
     // 🔥 AUDITORÍA CORREGIDA - Solo 3 parámetros según tu estructura DB
-    if (usuario_id) {
-      Auditoria.registrarAuditoria(
-        usuario_id,
-        `Actualizar Producto: ${nombre} (ID: ${id})`,  // Acción descriptiva
-        (errAud) => {
-          if (errAud) console.error('❌ Error en auditoría:', errAud);
-          else console.log('✅ Auditoría registrada: Actualizar producto');
-        }
-      );
-    }
+   
 
     res.json({ mensaje: 'Producto actualizado' });
   });

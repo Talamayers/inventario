@@ -24,16 +24,7 @@ const registrarEntrada = (req, res) => {
     }
 
     // Registrar en auditoría
-    Auditoria.registrarAuditoria(
-      usuario_id,
-      'REGISTRAR_ENTRADA',
-      `Entrada de ${entrada.cantidad} unidades para el producto ID ${producto_id}`,
-      (errAud) => {
-        if (errAud) {
-          console.error('Error al registrar en auditoría:', errAud);
-        }
-      }
-    );
+   
 
     res.status(201).json({ mensaje: 'Entrada registrada', id: resultado.entradaId });
   });

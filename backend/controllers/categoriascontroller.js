@@ -37,17 +37,7 @@ const crearCategoria = (req, res) => {
     }
 
     // Registrar auditoría
-    if (usuario_id) {
-      Auditoria.registrarAuditoria(
-        usuario_id,
-        'CREAR_CATEGORIA',
-        `Se creó la categoría "${nombre}"`,
-        (errAud) => {
-          if (errAud) console.error('Error en auditoría:', errAud);
-        }
-      );
-    }
-
+   
     res.status(201).json({ mensaje: 'Categoría creada', id: resultado.insertId });
   });
 };
@@ -67,16 +57,7 @@ const actualizarCategoria = (req, res) => {
     }
 
     // Registrar auditoría
-    if (usuario_id) {
-      Auditoria.registrarAuditoria(
-        usuario_id,
-        'ACTUALIZAR_CATEGORIA',
-        `Se actualizó la categoría con ID ${id} a "${nombre}"`,
-        (errAud) => {
-          if (errAud) console.error('Error en auditoría:', errAud);
-        }
-      );
-    }
+    
 
     res.json({ mensaje: 'Categoría actualizada' });
   });
@@ -93,16 +74,7 @@ const eliminarCategoria = (req, res) => {
     }
 
     // Registrar auditoría
-    if (usuario_id) {
-      Auditoria.registrarAuditoria(
-        usuario_id,
-        'ELIMINAR_CATEGORIA',
-        `Se eliminó la categoría con ID ${id}`,
-        (errAud) => {
-          if (errAud) console.error('Error en auditoría:', errAud);
-        }
-      );
-    }
+    
 
     res.json({ mensaje: 'Categoría eliminada' });
   });

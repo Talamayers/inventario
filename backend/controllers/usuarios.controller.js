@@ -24,15 +24,7 @@ exports.createUsuario = (req, res) => {
     }
 
     // Auditoría
-    Auditoria.registrarAuditoria(
-      nuevoUsuario.usuario_id,
-      'CREAR',
-      `Se creó el usuario con email: ${nuevoUsuario.email}`,
-      (errAud) => {
-        if (errAud) console.error('Error en auditoría:', errAud);
-      }
-    );
-
+    
     res.status(201).json({ message: 'Usuario creado exitosamente' });
   });
 };
@@ -52,14 +44,7 @@ exports.updateUsuario = (req, res) => {
     }
 
     // Auditoría
-    Auditoria.registrarAuditoria(
-      datosUsuario.usuario_id,
-      'ACTUALIZAR',
-      `Se actualizó el usuario con ID: ${id}`,
-      (errAud) => {
-        if (errAud) console.error('Error en auditoría:', errAud);
-      }
-    );
+    
 
     res.json({ message: 'Usuario actualizado correctamente' });
   });
@@ -80,14 +65,7 @@ exports.deleteUsuario = (req, res) => {
     }
 
     // Auditoría
-    Auditoria.registrarAuditoria(
-      usuario_id,
-      'ELIMINAR',
-      `Se eliminó el usuario con ID: ${id}`,
-      (errAud) => {
-        if (errAud) console.error('Error en auditoría:', errAud);
-      }
-    );
+   
 
     res.json({ message: 'Usuario eliminado correctamente' });
   });
